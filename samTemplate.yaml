@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: hw3
-Parameters:
 Resources:
   nyucloudhw2cfphoto:
     Type: AWS::S3::Bucket
