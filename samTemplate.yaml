@@ -12,6 +12,21 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: 'nyucloudhw3emails'
+  HW3EmailBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref nyucloudhw3EmailBucket
+      PolicyDocument:
+        Id: PublicReadWritePolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 
+            - 's3:GetObject'
+            - 's3:PutObject'
+            Resource: !Sub arn:aws:s3:::nyucloudhw3emails/*
   HW3LF1Role:
     Type: AWS::IAM::Role
     Properties:
