@@ -2,9 +2,62 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: hw3
 Resources:
-  nyucloudhw2cfphoto:
+  nyucloudhw3SageMakerBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: 'nyucloudhw3'
       VersioningConfiguration:
         Status: Enabled
+  nyucloudhw3EmailBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: 'nyucloudhw3emails'
+  HW3LF1Role:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - 'lambda.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        -
+          PolicyName: 'AWSLambdaBasicExecutionRole'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
+              -
+                Effect: Allow
+                Action:
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/HW3LF1:*'
+  HW3LF1:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: HW3LF1
+      Runtime: python3.9
+      Handler: lf1.lambda_handler
+      CodeUri: ./lf1
+      Description: 'HW3LF1'
+      MemorySize: 128
+      Timeout: 30
+      Role: !GetAtt HW3LF1Role.Arn
+      Events:
+        CreateThumbnailEvent:
+          Type: S3
+          Properties:
+            Bucket: !Ref nyucloudhw3EmailBucket
+            Events: s3:ObjectCreated:*
