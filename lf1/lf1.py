@@ -9,6 +9,8 @@ import csv
 runtime= boto3.client('runtime.sagemaker')
 
 def lambda_handler(event, context):
+    print(event)
+    print(event["Records"])
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
