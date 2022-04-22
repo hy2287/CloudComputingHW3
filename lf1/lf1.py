@@ -9,6 +9,7 @@ import email
 #ENDPOINT_NAME = os.environ['ENDPOINT_NAME']
 runtime= boto3.client('runtime.sagemaker')
 s3 = boto3.client('s3')
+ses = boto3.client('ses')
 
 def lambda_handler(event, context):
     print(event)
@@ -22,13 +23,36 @@ def lambda_handler(event, context):
     # print("email obj: ", email_obj)
     # body = email_obj.get_payload(decode=True)
     # print("email body: ", body)
-
+    email_body = ""
     if email_obj.is_multipart():
-        for payload in email_obj.get_payload():
-            print("email body: ", payload.get_payload())
+        email_body = email_obj.get_payload()[0].get_payload()
     else:
-        print("email body: ", email_obj.get_payload())
+        email_body = email_obj.get_payload()
+    print("email body = ")
+    print(email_body)
+    fromAddress = email_obj["from"]
+    print("from address")
+    print(fromAddress)
 
+    response = ses.send_email(
+        Source='testing@nyucloudhw3.ga',
+        Destination={
+            'ToAddresses': [
+                fromAddress
+            ]
+        },
+        Message={
+            'Subject': {
+                'Data': 'Hi moma'
+            },
+            'Body': {
+                'Text': {
+                    'Data': 'Moma moma\nI am Moma\nBest,\nMoma'
+                }
+            }
+        }
+    )
+    print(response)
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
