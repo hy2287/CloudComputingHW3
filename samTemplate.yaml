@@ -1,6 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: hw3
+Parameters:
+  LayerArn:
+    Default: 'arn:aws:lambda:us-east-1:770693421928:layer:Klayers-p39-numpy:2'
+    Description: Layer Arn
+    Type: String
 Resources:
   nyucloudhw2cfphoto:
     Type: AWS::S3::Bucket
@@ -72,6 +77,8 @@ Resources:
       MemorySize: 128
       Timeout: 30
       Role: !GetAtt HW3LF1Role.Arn
+      Layers:
+        - Ref: LayerArn
       Events:
         CreateThumbnailEvent:
           Type: S3
