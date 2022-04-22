@@ -56,9 +56,6 @@ def lambda_handler(event, context):
                                        ContentType='text/csv',
                                        Body=text)
 
-    print(ml_response)
-    print(ml_response["Body"])
-    print(json.loads(ml_response["Body"]))
     temp = ml_response["Body"].read()
     print(temp)
     print(json.loads(temp))
