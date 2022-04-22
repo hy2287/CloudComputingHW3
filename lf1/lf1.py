@@ -55,9 +55,9 @@ def lambda_handler(event, context):
     ml_response = runtime.invoke_endpoint(EndpointName=ENDPOINT_NAME,
                                        ContentType='text/csv',
                                        Body=text)
-                                       
+
     print(ml_response)
-    ml_result = json.loads(ml_response['Body'].read().decode())
+    ml_result = json.loads(ml_response["Body"].read().decode())
     print(ml_result)
     # pred = int(result['predictions'][0]['score'])
     # predicted_label = 'M' if pred == 1 else 'B'
