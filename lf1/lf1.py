@@ -38,9 +38,9 @@ def lambda_handler(event, context):
     Here is a 240 character sample of the email body:\n{}\n \
     The email was categorized as {} with a {} confidence."
 
-    email_subject = email_body['Subject']
+    email_subject = email_obj['Subject']
     print(email_subject)
-    email_date = email_body['Date']
+    email_date = email_obj['Date']
     print(email_date)
 
     reply_body = reply_body_template.format(email_date,email_subject,email_body,"spam","99%")
