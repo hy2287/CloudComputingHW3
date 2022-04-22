@@ -8,6 +8,7 @@ import email
 # grab environment variables
 #ENDPOINT_NAME = os.environ['ENDPOINT_NAME']
 runtime= boto3.client('runtime.sagemaker')
+ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-04-22-03-10-01-057"
 s3 = boto3.client('s3')
 ses = boto3.client('ses')
 
@@ -65,6 +66,14 @@ def lambda_handler(event, context):
         }
     )
     print(response)
+
+    text = email_body.replace('\n', ' ').replace('\r', '')
+    ml_response = runtime.invoke_endpoint(EndpointName=ENDPOINT_NAME,
+                                       ContentType='text/csv',
+                                       Body=text)
+    print(ml_response)
+    # result = json.loads(response['Body'].read().decode())
+    # print(result)
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
