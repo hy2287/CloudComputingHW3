@@ -57,6 +57,9 @@ def lambda_handler(event, context):
                                        Body=text)
 
     print(ml_response)
+    temp = ml_response["Body"].read()
+    print(temp)
+    print(json.loads(temp))
     ml_result = json.loads(ml_response["Body"].read().decode())
     print(ml_result)
     # pred = int(result['predictions'][0]['score'])
