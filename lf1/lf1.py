@@ -3,7 +3,7 @@ import json
 import email
 
 runtime= boto3.client('runtime.sagemaker')
-ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-04-22-03-10-01-057"
+ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-04-22-14-44-52-256"
 REPLY_TO = 'markyamhs@gmail.com'
 s3 = boto3.client('s3')
 ses = boto3.client('ses')
@@ -57,6 +57,7 @@ def lambda_handler(event, context):
                                        Body=text)
 
     print(ml_response)
+    print(ml_response["Body"])
     print(json.loads(ml_response["Body"]))
     temp = ml_response["Body"].read()
     print(temp)
