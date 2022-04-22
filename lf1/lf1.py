@@ -34,11 +34,23 @@ def lambda_handler(event, context):
     print("from address")
     print(fromAddress)
 
+    reply_body_template = "We received your email sent at {} with the subject {}.\n\n\
+    Here is a 240 character sample of the email body:\n{}\n \
+    The email was categorized as {} with a {} confidence."
+
+    email_subject = email_body['Subject']
+    print(email_subject)
+    email_date = email_body['Date']
+    print(email_date)
+
+    reply_body = reply_body_template.format(email_date,email_subject,email_body,"spam","99%")
+    print(reply_body)
+
     response = ses.send_email(
         Source='testing@nyucloudhw3.ga',
         Destination={
             'ToAddresses': [
-                fromAddress
+                'markyamhs@gmail.com'
             ]
         },
         Message={
@@ -47,7 +59,7 @@ def lambda_handler(event, context):
             },
             'Body': {
                 'Text': {
-                    'Data': 'Moma moma\nI am Moma\nBest,\nMoma'
+                    'Data': reply_body
                 }
             }
         }
