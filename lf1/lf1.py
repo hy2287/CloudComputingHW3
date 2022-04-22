@@ -19,7 +19,9 @@ def lambda_handler(event, context):
     contents = data['Body'].read()
     raw_email = contents.decode("utf-8")
     email_obj = email.message_from_string(raw_email)
-    print(email_obj)
+    print("email obj: ", email_obj)
+    body = email_obj.get_payload(decode=True)
+    print("email body: ", body)
 
     return {
         'statusCode': 200,
