@@ -182,8 +182,8 @@ def lambda_handler(event, context):
     encoded_test_messages = vectorize_sequences(one_hot_test_messages, vocabulary_length)
     test_body= bytearray(encoded_test_messages)
     ml_response = sagemaker.invoke_endpoint(EndpointName=ENDPOINT_NAME,
-                                       ContentType='text/csv',
-                                       Body=test_body)
+                                       ContentType='text/plain',
+                                       Body=text)
 
     temp = ml_response["Body"].read()
     print(temp)
