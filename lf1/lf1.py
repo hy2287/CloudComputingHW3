@@ -126,11 +126,11 @@ def hashing_trick(text, n,
                                 split=split)
     return [int(hash_function(w) % (n - 1) + 1) for w in seq]
 
-runtime= boto3.client('runtime.sagemaker')
 ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-04-22-14-44-52-256"
 REPLY_TO = 'markyamhs@gmail.com'
 s3 = boto3.client('s3')
 ses = boto3.client('ses')
+sagemaker = boto3.client('sagemaker-runtime')
 
 def lambda_handler(event, context):
     bucket = event["Records"][0]["s3"]["bucket"]["name"]
@@ -180,10 +180,10 @@ def lambda_handler(event, context):
     vocabulary_length = 9013
     one_hot_test_messages = one_hot_encode(test_messages, vocabulary_length)
     encoded_test_messages = vectorize_sequences(one_hot_test_messages, vocabulary_length)
-
-    ml_response = runtime.invoke_endpoint(EndpointName=ENDPOINT_NAME,
+    test_body= bytearray(encoded_test_messages)
+    ml_response = sagemaker.invoke_endpoint(EndpointName=ENDPOINT_NAME,
                                        ContentType='text/csv',
-                                       Body=encoded_test_messages)
+                                       Body=test_body)
 
     temp = ml_response["Body"].read()
     print(temp)
