@@ -3,6 +3,7 @@ import io
 import boto3
 import json
 import csv
+import email
 
 # grab environment variables
 #ENDPOINT_NAME = os.environ['ENDPOINT_NAME']
@@ -16,7 +17,9 @@ def lambda_handler(event, context):
     key = event["Records"][0]["s3"]["object"]["key"]
     data = s3.get_object(Bucket=bucket, Key=key)
     contents = data['Body'].read()
-    print(contents.decode("utf-8"))
+    raw_email = contents.decode("utf-8")
+    email_obj = email.message_from_string(raw_email)
+    print(email_obj)
 
     return {
         'statusCode': 200,
