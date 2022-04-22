@@ -32,6 +32,7 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSESFullAccess'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
