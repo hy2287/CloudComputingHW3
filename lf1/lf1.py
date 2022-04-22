@@ -13,11 +13,11 @@ def lambda_handler(event, context):
     print(event)
     print(event["Records"])
     bucket = event["Records"][0]["s3"]["bucket"]["name"]
-    key = event["Records"][0]["object"]["key"]
+    key = event["Records"][0]["s3"]["object"]["key"]
     data = s3.get_object(Bucket=bucket, Key=key)
     contents = data['Body'].read()
     print(contents.decode("utf-8"))
-    
+
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
