@@ -33,6 +33,7 @@ Resources:
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSESFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
