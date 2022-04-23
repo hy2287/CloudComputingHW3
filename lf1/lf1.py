@@ -165,7 +165,7 @@ def lambda_handler(event, context):
     print(ml_result)
     ml_label = ml_result["predicted_label"][0][0]
     classification = ""
-    prob =  int(100*ml_result["predicted_probability"][0][0])
+    prob =  str(int(100*ml_result["predicted_probability"][0][0]))
     if ml_label<0.1:
         classification = "ham"
     else:
