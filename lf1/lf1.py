@@ -149,12 +149,28 @@ def lambda_handler(event, context):
 
     reply_body_template = "We received your email sent at {} with the subject {}.\n\n\
     Here is a 240 character sample of the email body:\n{}\n \
-    The email was categorized as {} with a {} confidence."
+    The email was categorized as {} with a {} percent confidence."
 
     email_subject = email_obj['Subject']
     email_date = email_obj['Date']
 
-    reply_body = reply_body_template.format(email_date,email_subject,email_body,"spam","99%")
+    text = email_body.replace('\n', ' ').replace('\r', '')
+    test_messages = [text]
+    vocabulary_length = 9013
+    one_hot_test_messages = one_hot_encode(test_messages, vocabulary_length)
+    encoded_test_messages = vectorize_sequences(one_hot_test_messages, vocabulary_length)
+    test_body= json.dumps(encoded_test_messages.tolist())
+    ml_response = sagemaker.invoke_endpoint(EndpointName=ENDPOINT_NAME,ContentType='application/json',Body=test_body)
+    ml_result = json.loads(ml_response['Body'].read().decode())
+    ml_label = ml_result["predicted_label"][0][0]
+    classification = ""
+    prob =  int(100*ml_result["predicted_probability"][0][0])
+    if ml_label<0.1:
+        classification = "ham"
+    else:
+        classification = "spam"
+
+    reply_body = reply_body_template.format(email_date,email_subject,email_body,classification,prob)
 
     response = ses.send_email(
         Source='testing@nyucloudhw3.ga',
@@ -175,27 +191,8 @@ def lambda_handler(event, context):
         }
     )
 
-    text = email_body.replace('\n', ' ').replace('\r', '')
-    test_messages = [text]
-    vocabulary_length = 9013
-    one_hot_test_messages = one_hot_encode(test_messages, vocabulary_length)
-    encoded_test_messages = vectorize_sequences(one_hot_test_messages, vocabulary_length)
-    test_body= bytearray(encoded_test_messages)
-    ml_response = sagemaker.invoke_endpoint(EndpointName=ENDPOINT_NAME,
-                                       ContentType='text/plain',
-                                       Body=text)
-
-    temp = ml_response["Body"].read()
-    print(temp)
-    print(temp.decode())
-    print(json.loads(temp))
-    # ml_result = json.loads(ml_response["Body"].read().decode())
-    # print(ml_result)
-    # pred = int(result['predictions'][0]['score'])
-    # predicted_label = 'M' if pred == 1 else 'B'
-
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda!')
+        'body': json.dumps(response)
     }
     
