@@ -126,7 +126,7 @@ def hashing_trick(text, n,
                                 split=split)
     return [int(hash_function(w) % (n - 1) + 1) for w in seq]
 
-ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-04-22-14-44-52-256"
+ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-04-23-01-10-46-830"
 REPLY_TO = 'markyamhs@gmail.com'
 s3 = boto3.client('s3')
 ses = boto3.client('ses')
