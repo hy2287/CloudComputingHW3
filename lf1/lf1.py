@@ -162,6 +162,7 @@ def lambda_handler(event, context):
     test_body= json.dumps(encoded_test_messages.tolist())
     ml_response = sagemaker.invoke_endpoint(EndpointName=ENDPOINT_NAME,ContentType='application/json',Body=test_body)
     ml_result = json.loads(ml_response['Body'].read().decode())
+    print(ml_result)
     ml_label = ml_result["predicted_label"][0][0]
     classification = ""
     prob =  int(100*ml_result["predicted_probability"][0][0])
