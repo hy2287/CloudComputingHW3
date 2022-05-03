@@ -126,7 +126,7 @@ def hashing_trick(text, n,
                                 split=split)
     return [int(hash_function(w) % (n - 1) + 1) for w in seq]
 
-ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-04-23-01-10-46-830"
+ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-05-03-01-03-51-998"
 REPLY_TO = 'markyamhs@gmail.com'
 s3 = boto3.client('s3')
 ses = boto3.client('ses')
@@ -160,6 +160,7 @@ def lambda_handler(event, context):
     one_hot_test_messages = one_hot_encode(test_messages, vocabulary_length)
     encoded_test_messages = vectorize_sequences(one_hot_test_messages, vocabulary_length)
     test_body= json.dumps(encoded_test_messages.tolist())
+    #https://stackoverflow.com/questions/55791047/how-to-send-numpy-array-to-sagemaker-endpoint-using-lambda-function
     ml_response = sagemaker.invoke_endpoint(EndpointName=ENDPOINT_NAME,ContentType='application/json',Body=test_body)
     ml_result = json.loads(ml_response['Body'].read().decode())
     print(ml_result)
