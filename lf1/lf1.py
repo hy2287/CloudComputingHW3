@@ -4,6 +4,9 @@ import email
 import string
 import sys
 import numpy as np
+import os
+
+sagemaker_endpoint = os.environ['SAGEMAKER_ENDPOINT']
 
 from hashlib import md5
 
@@ -126,7 +129,7 @@ def hashing_trick(text, n,
                                 split=split)
     return [int(hash_function(w) % (n - 1) + 1) for w in seq]
 
-ENDPOINT_NAME = "sms-spam-classifier-mxnet-2022-05-03-01-03-51-998"
+ENDPOINT_NAME = sagemaker_endpoint
 REPLY_TO = 'markyamhs@gmail.com'
 s3 = boto3.client('s3')
 ses = boto3.client('ses')
