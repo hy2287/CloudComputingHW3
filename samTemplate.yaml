@@ -82,8 +82,7 @@ Resources:
       Role: !GetAtt HW3LF1Role.Arn
       Environment:
         Variables:
-          SAGEMAKER_ENDPOINT: 
-            - Ref: SagemakerEndpoint
+          SAGEMAKER_ENDPOINT: !Ref SagemakerEndpoint
       Layers:
         - Ref: LayerArn
       Events:
