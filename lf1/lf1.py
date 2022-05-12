@@ -130,7 +130,7 @@ def hashing_trick(text, n,
     return [int(hash_function(w) % (n - 1) + 1) for w in seq]
 
 ENDPOINT_NAME = sagemaker_endpoint
-REPLY_TO = 'markyamhs@gmail.com'
+REPLY_TO = 'nkk6190@nyu.edu'
 s3 = boto3.client('s3')
 ses = boto3.client('ses')
 sagemaker = boto3.client('sagemaker-runtime')
